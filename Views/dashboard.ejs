@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bank Dashboard</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #e3f0ff;
+        }
+        .dashboard-header {
+            background: #1976d2;
+            color: #fff;
+            padding: 24px 0 16px 0;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(25, 118, 210, 0.08);
+        }
+        .dashboard-container {
+            max-width: 500px;
+            margin: 40px auto;
+            background: #f5faff;
+            border-radius: 12px;
+            box-shadow: 0 4px 24px rgba(25, 118, 210, 0.10);
+            padding: 32px 24px;
+        }
+        .balance {
+            font-size: 2.2rem;
+            color: #1976d2;
+            margin-bottom: 16px;
+        }
+        .actions {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .action-btn {
+            flex: 1;
+            padding: 12px 0;
+            background: #1976d2;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .action-btn:hover {
+            background: #1565c0;
+        }
+        .transactions {
+            margin-top: 16px;
+        }
+        .transactions h3 {
+            color: #1976d2;
+            margin-bottom: 8px;
+        }
+        .transaction-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .transaction-list li {
+            background: #e3f0ff;
+            margin-bottom: 8px;
+            padding: 10px 16px;
+            border-radius: 6px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 1rem;
+        }
+        .credit { color: #388e3c; }
+        .debit { color: #d32f2f; }
+    </style>
+</head>
+<body>
+    <div class="dashboard-header">
+        <h1>My Bank</h1>
+        <p>Welcome, User</p>
+    </div>
+    <div class="dashboard-container">
+        <div class="balance">
+            Balance: $5,200.00
+        </div>
+        <div class="actions">
+            <button class="action-btn">Deposit</button>
+            <button class="action-btn">Withdraw</button>
+            <button class="action-btn">Transfer</button>
+        </div>
+        <div class="transactions">
+            <h3>Recent Transactions</h3>
+            <ul class="transaction-list">
+                <li><span>Salary</span> <span class="credit">+$2,000.00</span></li>
+                <li><span>Groceries</span> <span class="debit">-$150.00</span></li>
+                <li><span>Electricity Bill</span> <span class="debit">-$80.00</span></li>
+                <li><span>Transfer to John</span> <span class="debit">-$500.00</span></li>
+                <li><span>Interest</span> <span class="credit">+$30.00</span></li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
