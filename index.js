@@ -9,7 +9,7 @@ const mongoose = require('mongoose');
 
 
 
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({ extended: true }));
 // const nigerianPresidents = [
 //     { name: 'Nnamdi Azikiwe', term: '1963-1966' },
 //     { name: 'Major General Johnson Aguiyi-Ironsi', term: '1966' },
@@ -36,7 +36,7 @@ app.use(express.urlencoded({extended: true}));
 // app.get('/', (request, response)=>{
 //     console.log('slash accessed');
 //     response.send('Hello World!');
-    
+
 // })
 
 // app.get('/users', (req, res)=>{
@@ -53,49 +53,85 @@ app.use(express.urlencoded({extended: true}));
 
 
 
-let URI ="mongodb+srv://abdulsalamabdulsalam1234567:Slazy102@cluster0.98jtxaz.mongodb.net/Trial_db?retryWrites=true&w=majority&appName=Cluster0"
+let URI = "mongodb+srv://abdulsalamabdulsalam1234567:Slazy102@cluster0.98jtxaz.mongodb.net/Trial_db?retryWrites=true&w=majority&appName=Cluster0"
 
 mongoose.connect(URI)
-.then(() =>{
-console.log("MongoDB connected successfully");
+    .then(() => {
+        console.log("MongoDB connected successfully");
+
+    })
+    .catch((err) => {
+        console.error("MongoDB connection failed", err);
+
+    })
+    //
+
+let customersSchema = new mongoose.Schema({
+    firstName: { type: String, required: true },
+    lastName: { type: String, required: true },
+    email: { type: String, required: true, unique: true, unique: [true, "Email already exists"] },
+    password: { type: String, required: true },
 
 })
-.catch((err)=>{
-console.error("MongoDB connection failed", err);
 
+let customersModel = mongoose.model('customers', customersSchema);
+
+let allCustomers = [];
+
+
+
+
+app.post('/register', (req, res) => {
+    console.log(req.body);
+    // res.send('User registered successfully!');
+    // allCustomers.push(req.body);
+    let newCustomer = new customersModel(req.body);
+    newCustomer.save()
+        .then((data) => {
+            console.log(data);
+            res.redirect('/dashboard');
+        })
+        .catch((err) => {
+            console.error(err);
+            res.send("Error occurred while saving user data: ", err);
+        })
 })
 
 
-let allCustomers =[]
 
+app.get('/dashboard', (req, res) => {
+    customersModel.find()
+        .then((data) => {
+            console.log(data);
+            allCustomers = data;
+            res.render('index', { allCustomers });
+        })
+        .catch((err) => {
+            console.error("Error fetching customers: ", err);
+            res.status(500).send("Error fetching customers");
 
-app.get('/dashboard', (req, res)=>{
-    res.render('dashboard');
+        })
 })
 
 
-app.get('/signup', (req, res)=>{
+app.get('/signup', (req, res) => {
     res.render('signup');
 })
 
-app.post('/register', (req, res)=>{
+
+
+
+app.get('/signin', (req, res) => {
     console.log(req.body);
-    res.send('User registered successfully!');
-    allCustomers.push(req.body);
+    res.render('signin',);
 })
 
-
-app.get('/signin',(req, res)=>{
-    console.log(req.body);
-    res.render('signin', );
-})
-
-app.post('/signin', (req, res)=>{
+app.post('/signin', (req, res) => {
     res.send('User signed in successfully!');
 })
 
 
 app.listen(port, () => {
     console.log(`server started at ${port}`);
-    
+
 })

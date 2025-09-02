@@ -6,8 +6,11 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>This is EJS</h1>
-    <%= `${2+2} even number` %>
-    <h1><%= `Hello ${names} is  ${age} years old` %></h1>
+   <h1>Welcome to your Dashboard</h1>
+   <% allCustomers.map((customer) =>{%>
+    <h1><%= customer.firstName %></h1>
+    <h3><%= customer.lastName %></h1>
+    <h4><%= customer.email %></h1>
+    <%}) %>
 </body>
 </html>
