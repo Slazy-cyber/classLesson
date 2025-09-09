@@ -2,9 +2,11 @@ const express = require('express');
 const app = express();
 require('ejs')
 app.set('view engine', 'ejs');
-const port = 5100
+const dotenv = require('dotenv');
 const mongoose = require('mongoose');
-
+const customerRouter = require("./routes/user.route");
+dotenv.config();
+const URI = process.env.URI;
 
 
 
@@ -53,7 +55,6 @@ app.use(express.urlencoded({ extended: true }));
 
 
 
-let URI = "mongodb+srv://abdulsalamabdulsalam1234567:Slazy102@cluster0.98jtxaz.mongodb.net/Trial_db?retryWrites=true&w=majority&appName=Cluster0"
 
 mongoose.connect(URI)
     .then(() => {
@@ -66,71 +67,31 @@ mongoose.connect(URI)
     })
     //
 
-let customersSchema = new mongoose.Schema({
-    firstName: { type: String, required: true },
-    lastName: { type: String, required: true },
-    email: { type: String, required: true, unique: true, unique: [true, "Email already exists"] },
-    password: { type: String, required: true },
 
-})
 
-let customersModel = mongoose.model('customers', customersSchema);
+// let customersModel = mongoose.model('customers', customersSchema);
 
 let allCustomers = [];
 
-
-
-
-app.post('/register', (req, res) => {
-    console.log(req.body);
-    // res.send('User registered successfully!');
-    // allCustomers.push(req.body);
-    let newCustomer = new customersModel(req.body);
-    newCustomer.save()
-        .then((data) => {
-            console.log(data);
-            res.redirect('/dashboard');
-        })
-        .catch((err) => {
-            console.error(err);
-            res.send("Error occurred while saving user data: ", err);
-        })
-})
-
-
-
-app.get('/dashboard', (req, res) => {
-    customersModel.find()
-        .then((data) => {
-            console.log(data);
-            allCustomers = data;
-            res.render('index', { allCustomers });
-        })
-        .catch((err) => {
-            console.error("Error fetching customers: ", err);
-            res.status(500).send("Error fetching customers");
-
-        })
-})
-
-
-app.get('/signup', (req, res) => {
-    res.render('signup');
-})
+app.use('/user', customerRouter);
 
 
 
 
-app.get('/signin', (req, res) => {
-    console.log(req.body);
-    res.render('signin',);
-})
-
-app.post('/signin', (req, res) => {
-    res.send('User signed in successfully!');
-})
 
 
+
+
+
+
+
+
+
+
+
+
+
+const port = process.env.PORT || 5100;
 app.listen(port, () => {
     console.log(`server started at ${port}`);
 
