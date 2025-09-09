@@ -78,19 +78,6 @@ app.use('/user', customerRouter);
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 const port = process.env.PORT || 5100;
 app.listen(port, () => {
     console.log(`server started at ${port}`);
