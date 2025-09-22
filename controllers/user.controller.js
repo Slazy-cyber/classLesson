@@ -1,14 +1,20 @@
 const customersModel = require("../models/user.models");
 const nodemailer = require ('nodemailer');
+const bcrypt = require('bcryptjs');
 exports.getSignup =  (req, res) => {
     res.render('signup');
 }
 
 exports.postRegister =  (req, res) => {
+    let salt = bcrypt.genSaltSync(10);
+    let hashedPassword = bcrypt.hashSync(req.body.password, salt);
+    req.body.password = hashedPassword;
     console.log(req.body);
     // res.send('User registered successfully!');
     // allCustomers.push(req.body);
     let newCustomer = new customersModel(req.body);
+
+
     newCustomer.save()
         .then((data) => {
             console.log(data);
@@ -70,28 +76,49 @@ exports.postSignin = (req, res) => {
     
 
     // customerModel.find is used to search the database for a user with the provided email and password
-    customerModel.find({ email: email})
-        .then((foundCustomers) => {
-            if (foundCustomers.length > 0) {
+    customersModel.findOne({ email: email})
+        .then((foundCustomer) => {
+            if (!foundCustomer) {
                 // If a matching user is found, redirect to the dashboard
                 res.redirect('/user/dashboard');
             } else {
                 // If no matching user is found, send an error message
                 res.send("Invalid email or password. Please try again.");
             }
+
+            const isMatch = bcrypt.compareSync(password, foundCustomer.password);
+
+            if (!isMatch) {
+                res.send("Invalid email or password. Please try again.");
+            } 
+
+            console.log("User logged in successfully:", foundCustomer);
+            
+            return res.json({ message: "Login successful",
+                user: {
+                    id: foundCustomer._id,
+                    name: foundCustomer.name,
+                    email: foundCustomer.email,
+                    password: foundCustomer.password
+                }
+            
+             });
         })
+
         .catch((err) => {
             console.error("Error during signin:", err);
             res.status(500).send("Internal server error");
         });
 }
 
+
 exports.getSignIn =  (req, res) => {
     console.log(req.body);
     res.render('signin',);
 }
 exports.postLogin =  (req, res) => {
-    res.send('User signed in successfully!');
+    // After successful signin, redirect to dashboard
+    res.redirect('/user/dashboard');
 }
 exports.getDashboard =   (req, res) => {
     customersModel.find()

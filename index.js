@@ -5,8 +5,11 @@ app.set('view engine', 'ejs');
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 const customerRouter = require("./routes/user.route");
+const cors = require('cors');
+app.use(cors());
 dotenv.config();
 const URI = process.env.URI;
+
 
 
 

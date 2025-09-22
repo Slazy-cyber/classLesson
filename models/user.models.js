@@ -5,6 +5,7 @@ let customersSchema = new mongoose.Schema({
     lastName: { type: String, required: true },
     email: { type: String, required: true, unique: true, unique: [true, "Email already exists"] },
     password: { type: String, required: true },
+    profilePic: { type: String, default: "https://example.com/default-profile-pic.jpg" },
 
 })
 
